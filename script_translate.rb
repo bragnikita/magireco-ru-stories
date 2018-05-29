@@ -116,11 +116,11 @@ class FileProcessor
       @lines_converter.images_path = File.join('images', "ep#{@episode}")
     end
     direct_copy_mode = false
-    zone_mode = false
+    zone_mode = 0
     while true do
       line = @reader.readline.strip
       if line.empty?
-        writel '' and next
+        writel '<div class="delimeter" />' and next
       end
       if /^<>/ =~ line
         direct_copy_mode = !direct_copy_mode
@@ -131,12 +131,12 @@ class FileProcessor
         next
       end
       if /^--\s*\(/ =~ line
-        zone_mode = true
+        zone_mode = zone_mode + 1
         writel '<div class="zone">' + '<div class="header">' + wrap_content(lines_converter.zone(line)) + '</div>'
         next
       end
       if /^--\s*$/ =~ line
-        zone_mode = false
+        zone_mode = zone_mode - 1
         writel '</div>'
         next
       end
@@ -151,7 +151,7 @@ class FileProcessor
       end
       writel "<div class=\"serif\">#{@lines_converter.serif(line)}</div>" and next
     end
-    if zone_mode
+    if zone_mode > 0
       log "!!! ----- Unclosed zone specifier detected!!! ---- !!!"
     end
   end
@@ -198,6 +198,7 @@ class LineConverter
     end
 
     content = m[2]
+    content.gsub!(/\//, '<br/>')
     content.gsub!(/\*(.+?)\*/, '<em>*\1*</em>')
     content.gsub!(/\((.+?)\)/, '<span class="minds">(\1)</span>')
 
@@ -217,7 +218,7 @@ class LineConverter
     unless /\.[[:alpha:]]+$/ =~ image_name
       image_name = "#{image_name}.png"
     end
-    image_name = '{{site.baseurl}}{{page.resources_path}}/ch{{page.chapter}}/ep{{page.episode}}/' +  image_name
+    image_name = '{{site.baseurl}}{{page.resources_path}}{{page.resources_story_path}}/' +  image_name
     "<img src=\"#{image_name}\" />"
   end
 
@@ -251,10 +252,10 @@ parser = OptionParser.new do |opts|
   end
 end
 parser.parse!
-unless ARGV.grep(/^-f/).empty?
+unless ARGV.grep(/^-u/).empty?
   options.force = true
 end
-
+options.force = true
 if options.src.nil?
   puts parser
   raise "Missed argument -s (Source directory)"
