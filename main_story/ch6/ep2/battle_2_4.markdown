@@ -2,6 +2,7 @@
 chapter: 6
 episode: 2
 battle: 4
+resources_story_path: "/ch6/ep2"
 ---
 [ Район Сакаэ. ]
 [ Фешенебельная торговая улица. ]

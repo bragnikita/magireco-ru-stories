@@ -2,6 +2,7 @@
 chapter: 6
 episode: 1
 battle: 2
+resources_story_path: "/ch6/ep1"
 ---
 [гостиная в доме Ятиё]
 Фелиция: Чеее?! -1 - (-1) = 0 ?! Не врубаюсь вообще!

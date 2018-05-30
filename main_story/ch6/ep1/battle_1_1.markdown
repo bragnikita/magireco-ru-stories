@@ -2,6 +2,7 @@
 chapter: 6
 episode: 1
 battle: 1
+resources_story_path: "/ch6/ep1"
 ---
 
 [в темноте]

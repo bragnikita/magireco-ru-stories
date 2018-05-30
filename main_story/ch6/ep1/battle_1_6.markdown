@@ -2,6 +2,7 @@
 chapter: 6
 episode: 1
 battle: 6
+resources_story_path: "/ch6/ep1"
 ---
 [На улице. Вечер.]
 !6_1!
