@@ -192,15 +192,12 @@ class LineConverter
   attr_accessor :images_path
 
   def serif(str)
-    m = /^(.*):(.+)$/.match str
+    m = /^(.*[^\\]):(.+)$/.match str
     if m.nil?
-      return str
+      return process_inline str
     end
 
-    content = m[2]
-    content.gsub!(/\//, '<br/>')
-    content.gsub!(/\*(.+?)\*/, '<em>*\1*</em>')
-    content.gsub!(/\((.+?)\)/, '<span class="minds">(\1)</span>')
+    content = process_inline m[2]
 
     "<div class=\"name\">#{m[1]}</div><div class=\"content\">#{content}</div>"
   end
@@ -224,6 +221,15 @@ class LineConverter
 
   def zone(str)
     extract(/\((.+)\)/, str)
+  end
+
+  private
+
+  def process_inline(line)
+    line
+    .gsub(/\//, '<br/>')
+    .gsub(/\*(.+?)\*/, '<em>*\1*</em>')
+    .gsub(/\((.+?)\)/, '<span class="minds">(\1)</span>')
   end
 end
 
