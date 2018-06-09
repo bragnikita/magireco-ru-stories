@@ -220,7 +220,7 @@ class LineConverter
   end
 
   def zone(str)
-    extract(/\((.+)\)/, str)
+    extract(/\((.*)\)/, str)
   end
 
   private
