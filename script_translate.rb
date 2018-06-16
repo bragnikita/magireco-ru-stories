@@ -192,7 +192,7 @@ class LineConverter
   attr_accessor :images_path
 
   def serif(str)
-    m = /^(.*[^\\]):(.+)$/.match str
+    m = /^([^:]*):(.+)$/.match str
     if m.nil?
       return process_inline str
     end
