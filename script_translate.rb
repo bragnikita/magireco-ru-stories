@@ -149,7 +149,13 @@ class FileProcessor
       if /^!(.+)!$/ =~ line
         writel "\n<div class=\"image\">#{@lines_converter.image(line)}</div>\n" and next
       end
-      writel "<div class=\"serif\">#{@lines_converter.serif(line)}</div>" and next
+      if /^<.+>$/ =~ line
+        write "\n<div class=\"no-dialog-name\">#{@lines_converter.no_dialog_name(line)}</div>\n" and next
+      end
+      if /^[^:]+(?<!\\):.+$/ =~ line
+          write "\n<div class=\"serif\">#{@lines_converter.serif(line)}</div>\n" and next
+      end
+      writel "\n<div class=\"no-dialog-serif\">#{@lines_converter.no_dialog_serif(line)}</div>\n" and next
     end
     if zone_mode > 0
       log "!!! ----- Unclosed zone specifier detected!!! ---- !!!"
@@ -192,7 +198,7 @@ class LineConverter
   attr_accessor :images_path
 
   def serif(str)
-    m = /^([^:]*):(.+)$/.match str
+    m = /^([^:]+):(.+)$/.match str
     if m.nil?
       return process_inline str
     end
@@ -223,10 +229,19 @@ class LineConverter
     extract(/\((.*)\)/, str)
   end
 
+  def no_dialog_name(str)
+    extract(/<(.+)>/, str)
+  end
+
+  def no_dialog_serif(str)
+    process_inline str
+  end
+
   private
 
   def process_inline(line)
     line
+    .gsub(/\\:/,':')
     .gsub(/\//, '<br/>')
     .gsub(/\*(.+?)\*/, '<em>*\1*</em>')
     .gsub(/\((.+?)\)/, '<span class="minds">(\1)</span>')
