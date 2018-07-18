@@ -120,7 +120,7 @@ class FileProcessor
     while true do
       line = @reader.readline.strip
       if line.empty?
-        writel '<div class="delimeter" />' and next
+        writel '<div class="delimeter"></div>' and next
       end
       if /^<>/ =~ line
         direct_copy_mode = !direct_copy_mode
